@@ -78,6 +78,9 @@ bool Copter::set_mode(uint8_t mode)
         case FLIP:
             success = flip_init(ignore_checks);
             break;
+        case RECTANGLE:
+            success = rectangle_init(ignore_checks);
+            break;
 
 #if AUTOTUNE_ENABLED == ENABLED
         case AUTOTUNE:
@@ -178,6 +181,9 @@ void Copter::update_flight_mode()
 
         case RTL:
             rtl_run();
+            break;
+        case RECTANGLE:
+            rectangle_run();
             break;
 
         case DRIFT:
@@ -338,6 +344,10 @@ void Copter::print_flight_mode(AP_HAL::BetterStream *port, uint8_t mode)
     case CIRCLE:
         port->print_P(PSTR("CIRCLE"));
         break;
+      case RECTANGLE:
+            port->print_P(PSTR("RECTANGLE"));
+            break;
+
     case LAND:
         port->print_P(PSTR("LAND"));
         break;
