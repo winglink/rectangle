@@ -95,6 +95,9 @@ Copter::Copter(void) :
                 g.p_pos_xy, g.pi_vel_xy),
     wp_nav(inertial_nav, ahrs, pos_control, attitude_control),
     circle_nav(inertial_nav, ahrs, pos_control),
+//**********************
+   rectangle(inertial_nav, ahrs, pos_control),
+//************************
     pmTest1(0),
     fast_loopTimer(0),
     mainLoop_count(0),

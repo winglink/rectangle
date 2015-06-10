@@ -19,13 +19,7 @@ bool Copter::rectangle_init(bool ignore_checks)
     printf("rectangle_init()\r\n");
 
     if(position_ok()||ignore_checks) {
-        pos_control.init_xy_controller();
-        pos_control.set_speed_xy(300);
-        pos_control.set_accel_xy(60);
-        pos_control.set_speed_z(250, 150);
-        pos_control.set_accel_z(100);
-        pos_control.calc_leash_length_xy();
-        pos_control.calc_leash_length_z();
+        rectangle.init();
         return true;
     }
     else
@@ -55,7 +49,7 @@ void Copter::rectangle_run()
         // get pilot desired climb rate
         target_climb_rate = get_pilot_desired_climb_rate(channel_throttle->control_in);
     }
-    rectangle_update();
+     rectangle.update();
     // convert pilot input into desired vehicle angles or rotation rates
     //   g.rc_1.control_in : pilots roll input in the range -4500 ~ 4500
     //   g.rc_2.control_in : pilot pitch input in the range -4500 ~ 4500
@@ -68,14 +62,4 @@ void Copter::rectangle_run()
     // call position controller's z-axis controller or simply pass through throttle
     //   attitude_control.set_throttle_out(desired throttle, true);
 
-}
-void Copter::rectangle_update(){
-    float dt=pos_control.time_since_last_xy_update();
-    float tot_x,tot_y,tot_z;
-    float dx=5,dy=5,dz=5;
-    Vector3f curr_pos =inertial_nav.get_position();
-
-    Vector3f target;
-    target.x+=dx;
-    tot_x+=dx;
 }

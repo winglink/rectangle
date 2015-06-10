@@ -44,6 +44,9 @@
 #include <AP_HAL_Empty.h>
 
 // Application dependencies
+//*****************************
+#include <Rectangle.h>
+//***************************
 #include <GCS.h>
 #include <GCS_MAVLink.h>        // MAVLink GCS definitions
 #include <AP_SerialManager.h>   // Serial manager library
@@ -111,6 +114,7 @@
 
 // Local modules
 #include "Parameters.h"
+#include "Rectangle.h"
 
 class Copter {
     public:
@@ -414,7 +418,9 @@ private:
     AC_PosControl pos_control;
     AC_WPNav wp_nav;
     AC_Circle circle_nav;
-
+    //*********************
+    Rectangle  rectangle;
+    //******************
     // Performance monitoring
     int16_t pmTest1;
 
