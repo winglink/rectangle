@@ -751,6 +751,7 @@ private:
     //**************
     bool rectangle_init(bool ignore_checks);
     void rectangle_run();
+    void rectangle_update();
     //***************
     void crash_check();
     void parachute_check();

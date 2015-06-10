@@ -29,7 +29,7 @@ void Copter::read_control_switch()
     else if (g.rc_5.radio_in < 1491) switch_position = 2;
     else if (g.rc_5.radio_in < 1621) switch_position = 3;
     else if (g.rc_5.radio_in < 1750) switch_position = 4;
-    else switch_position = 5;
+    else switch_position = 18;
 
     // store time that switch last moved
     if(control_switch_state.last_switch_position != switch_position) {
@@ -43,7 +43,10 @@ void Copter::read_control_switch()
 
     if (control_switch_changed && sufficient_time_elapsed && failsafe_disengaged) {
         // set flight mode and simple mode setting
-        if (set_mode(flight_modes[switch_position])) {
+        if(switch_position==18){
+            set_mode(switch_position);
+        }
+        if ((switch_position!=18)&&set_mode(flight_modes[switch_position])) {
             // play a tone
             if (control_switch_state.debounced_switch_position != -1) {
                 // alert user to mode change failure (except if autopilot is just starting up)
@@ -62,9 +65,6 @@ void Copter::read_control_switch()
                 }
             }
 
-        } else if (control_switch_state.last_switch_position != -1) {
-            // alert user to mode change failure
-            AP_Notify::events.user_mode_change_failed = 1;
         }
 
         // set the debounced switch position

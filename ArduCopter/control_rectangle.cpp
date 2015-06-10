@@ -69,10 +69,13 @@ void Copter::rectangle_run()
     //   attitude_control.set_throttle_out(desired throttle, true);
 
 }
-void rectangle_update(){
+void Copter::rectangle_update(){
     float dt=pos_control.time_since_last_xy_update();
+    float tot_x,tot_y,tot_z;
+    float dx=5,dy=5,dz=5;
+    Vector3f curr_pos =inertial_nav.get_position();
 
-
-
-
+    Vector3f target;
+    target.x+=dx;
+    tot_x+=dx;
 }
