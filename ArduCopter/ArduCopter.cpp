@@ -155,6 +155,7 @@ const AP_Scheduler::Task Copter::scheduler_tasks[] PROGMEM = {
 
 void Copter::setup() 
 {
+    printf("it's in setup\r\n");
     cliSerial = hal.console;
 
     // Load the default values of variables listed in var_info[]s
@@ -208,6 +209,7 @@ void Copter::perf_update(void)
 
 void Copter::loop()
 {
+    printf("it's in loop  \r\n");
     // wait for an INS sample
     ins.wait_for_sample();
 

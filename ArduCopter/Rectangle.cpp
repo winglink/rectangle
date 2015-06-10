@@ -3,16 +3,19 @@
 //
 #include <Rectangle.h>
 #include <AP_Math.h>
-#include "Rectangle.h"
-#include "../libraries/AC_AttitudeControl/AC_PosControl.h"
+#include <Rectangle.h>
 
 Rectangle::Rectangle(const AP_InertialNav& inav,const AP_AHRS& ahrs,AC_PosControl& pos_control) :
-       dx(5.0f);
-       dy(5.0f);
-       dz(5.0f);
-    tot_x(0.0f);
-    tot_y(0.0f);
-    tot_z(0.0f);
+       dx(5.0f),
+       dy(5.0f),
+       dz(5.0f),
+    tot_x(0.0f),
+    tot_y(0.0f),
+    tot_z(0.0f),
+    _inav(inav),
+    _ahrs(ahrs),
+    _pos_control(pos_control)
+
 {}
 
 void Rectangle::init(){
@@ -27,8 +30,8 @@ void Rectangle::init(){
 }
 
 void Rectangle::update(){
-        float dt=pos_control.time_since_last_xy_update();
-        Vector3f curr_pos =inertial_nav.get_position();
+        float dt=_pos_control.time_since_last_xy_update();
+        Vector3f curr_pos =_inav.get_position();
         Vector3f target;
         target.x=curr_pos.x+dx;
         tot_x+=dx;

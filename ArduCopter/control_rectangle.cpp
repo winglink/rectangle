@@ -10,13 +10,12 @@
 // Created by wing on 15/6/9.
 //
 #include "Copter.h"
-void rectangle_update();
 
 // newflightmode_init - initialise flight mode
 bool Copter::rectangle_init(bool ignore_checks)
 {
 
-    printf("rectangle_init()\r\n");
+    printf("it's in rectangle_init()\r\n");
 
     if(position_ok()||ignore_checks) {
         rectangle.init();
@@ -31,9 +30,9 @@ bool Copter::rectangle_init(bool ignore_checks)
 // will be called at 100hz or more
 void Copter::rectangle_run()
 {
-    printf("rectangle_run()\r\n");
+    printf("it's in rectangle_run()\r\n");
     float target_yaw_rate = 0;
-    float target_climb_rate = 0;
+    //float target_climb_rate = 0;
     // if not armed or throttle at zero, set throttle to zero and exit immediately
     if(!ap.auto_armed || ap.land_complete || !motors.get_interlock()) {
         attitude_control.set_throttle_out_unstabilized(0,true,g.throttle_filt);
@@ -47,7 +46,7 @@ void Copter::rectangle_run()
             set_auto_yaw_mode(AUTO_YAW_HOLD);
         }
         // get pilot desired climb rate
-        target_climb_rate = get_pilot_desired_climb_rate(channel_throttle->control_in);
+      //  target_climb_rate = get_pilot_desired_climb_rate(channel_throttle->control_in);
     }
      rectangle.update();
     // convert pilot input into desired vehicle angles or rotation rates
