@@ -972,6 +972,9 @@ public:
     int8_t test_sonar(uint8_t argc, const Menu::arg *argv);
 
     int8_t reboot_board(uint8_t argc, const Menu::arg *argv);
+    //***********************
+    int Ii;
+    //************************
 };
 
 #define MENU_FUNC(func) FUNCTOR_BIND(&copter, &Copter::func, int8_t, uint8_t, const Menu::arg *)

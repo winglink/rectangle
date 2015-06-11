@@ -97,6 +97,7 @@ Copter::Copter(void) :
     circle_nav(inertial_nav, ahrs, pos_control),
 //**********************
    rectangle(inertial_nav, ahrs, pos_control),
+   Ii(0),
 //************************
     pmTest1(0),
     fast_loopTimer(0),
