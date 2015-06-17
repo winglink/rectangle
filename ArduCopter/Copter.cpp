@@ -96,7 +96,7 @@ Copter::Copter(void) :
     wp_nav(inertial_nav, ahrs, pos_control, attitude_control),
     circle_nav(inertial_nav, ahrs, pos_control),
 //**********************
-   rectangle(inertial_nav, ahrs, pos_control),
+   rectangle(inertial_nav, ahrs, pos_control,attitude_control),
    Ii(0),
 //************************
     pmTest1(0),

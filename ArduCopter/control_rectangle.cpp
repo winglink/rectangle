@@ -19,6 +19,7 @@ bool Copter::rectangle_init(bool ignore_checks)
 
     if(position_ok()||ignore_checks) {
         rectangle.init();
+        rectangle.pos_point();//计算航迹点
         return true;
     }
     else
@@ -54,6 +55,9 @@ void Copter::rectangle_run()
       //  target_climb_rate = get_pilot_desired_climb_rate(channel_throttle->control_in);
     }
      rectangle.update();
+     pos_control.update_z_controller();
+     attitude_control.angle_ef_roll_pitch_yaw(rectangle.get_roll(),rectangle.get_pitch(),rectangle.get_yaw(),true);
+
     // convert pilot input into desired vehicle angles or rotation rates
     //   g.rc_1.control_in : pilots roll input in the range -4500 ~ 4500
     //   g.rc_2.control_in : pilot pitch input in the range -4500 ~ 4500
