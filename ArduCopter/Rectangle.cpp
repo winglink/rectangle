@@ -15,6 +15,7 @@ Rectangle::Rectangle(const AP_InertialNav& inav,const AP_AHRS& ahrs,AC_PosContro
     tot_y(0.0f),
     tot_z(0.0f),
     _yaw(0.0f),
+      No(0),
     _wp_last_update(0),
     _track_length(0.0f),
     _limited_speed_xy_cms(0.0f),
@@ -54,12 +55,11 @@ void Rectangle::update(){
 void Rectangle::pos_point() {
      Vector3f curr_pos = _inav.get_position();
 
-             wp_point[0]=curr_pos;
-             wp_point[1](curr_pos.x+600,curr_pos.y,curr_pos.z);
-             wp_point[2](curr_pos.x+600,curr_pos.y+600,curr_pos.z);
-             wp_point[3](curr_pos.x,curr_pos.y+600,curr_pos.z);
+             wp_point[0](curr_pos.x+600,curr_pos.y,curr_pos.z);
+             wp_point[1](curr_pos.x+600,curr_pos.y+600,curr_pos.z);
+             wp_point[2](curr_pos.x,curr_pos.y+600,curr_pos.z);
 
-             set_wp_origin_and_destination(wp_point[0],wp_point[1]);
+             set_wp_origin_and_destination(_pos_control.get_pos_target(),wp_point[No++]);
 
 }
 void Rectangle::set_wp_origin_and_destination(const Vector3f &origin,const Vector3f &destination){
@@ -186,6 +186,17 @@ void Rectangle::cal_target_point(float dt) {
             _flags.reached_destination=true;
         }
     }
+}
+
+void Rectangle::rec_nav() {
+
+         if(_flags.reached_destination==true){
+            set_wp_origin_and_destination(_pos_control.get_pos_target(),wp_point[No++]);
+            if(No==3){
+                No=0;
+            }
+         }
+
 }
 
 

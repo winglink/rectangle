@@ -71,3 +71,13 @@ void Copter::rectangle_run()
     //   attitude_control.set_throttle_out(desired throttle, true);
 
 }
+void Copter::rectangle_nav() {
+     if(control_mode!=RECTANGLE){
+         return;
+     }
+     rectangle.rec_nav();
+
+
+
+
+}

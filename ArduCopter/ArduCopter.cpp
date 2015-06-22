@@ -209,11 +209,7 @@ void Copter::perf_update(void)
 
 void Copter::loop()
 {
-    if(!((Ii++)%100)) {
-        printf("it's in loop  \r\n");
-        if(Ii>30000)
-            Ii=0;
-    }
+
     // wait for an INS sample
     ins.wait_for_sample();
 

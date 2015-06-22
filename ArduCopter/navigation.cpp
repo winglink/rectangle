@@ -15,6 +15,7 @@ void Copter::run_nav_updates(void)
 
     // run autopilot to make high level decisions about control modes
     run_autopilot();
+    rectangle_nav();
 }
 
 // calc_position - get lat and lon positions from inertial nav library

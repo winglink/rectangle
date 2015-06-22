@@ -26,6 +26,7 @@ public:
     float get_roll() const {return _pos_control.get_roll();}
     float get_pitch() const {return _pos_control.get_pitch();}
     float get_yaw() const {return _yaw;}
+    void  rec_nav();
 
 private:
     const AP_InertialNav&  _inav;
@@ -35,6 +36,7 @@ private:
 
     float tot_x,tot_y,tot_z;
     float dx,dy,dz;
+    int   No;
     Vector3f wp_point[4];
     Vector3f _origin;
     Vector3f _destination;
@@ -51,6 +53,7 @@ private:
     const  float  _wp_accel_z_cms=100;
     const  float  _track_accel=10;  //  change ??
     const  float  _track_leash_length=150;
+
     struct rectangle_flags{
       uint8_t  reached_destination   :1;
       uint8_t  new_wp_destination    :1;

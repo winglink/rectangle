@@ -9,6 +9,7 @@
 // loiter_init - initialise loiter controller
 bool Copter::loiter_init(bool ignore_checks)
 {
+    printf("loiter_init()\r\n");
     if (position_ok() || optflow_position_ok() || ignore_checks) {
 
         // set target to current position

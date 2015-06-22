@@ -9,6 +9,7 @@
 // stabilize_init - initialise stabilize controller
 bool Copter::stabilize_init(bool ignore_checks)
 {
+    printf("stabilize_init()\r\n");
     // set target altitude to zero for reporting
     // To-Do: make pos controller aware when it's active/inactive so it can always report the altitude error?
     pos_control.set_alt_target(0);
@@ -22,7 +23,7 @@ bool Copter::stabilize_init(bool ignore_checks)
 void Copter::stabilize_run()
 {
 
-    if(!((Ii++)%100)) {
+    if(!((Ii++)%1000)) {
         printf("it's in stabilize_run\r\n");
         if(Ii>30000)
             Ii=0;

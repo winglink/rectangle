@@ -74,7 +74,7 @@
 // FRAME_CONFIG
 //
 #ifndef FRAME_CONFIG
- # define FRAME_CONFIG   QUAD_FRAME
+ # define FRAME_CONFIG   HEXA_FRAME
 #endif
 
 #if FRAME_CONFIG == QUAD_FRAME
