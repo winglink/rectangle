@@ -91,7 +91,7 @@ void Rectangle::set_wp_origin_and_destination(const Vector3f &origin,const Vecto
 }
 
 float Rectangle::get_bearing_cd(const Vector3f &origin,const Vector3f &destination){
-    float bearing=9000+atan2f(-(destination.x-origin.x),destination.y-origin.y);
+    float bearing=9000+atan2f(-(destination.x-origin.x),destination.y-origin.y)*5729.57795f;
     if(bearing<0){
         bearing+=36000;
     }
@@ -106,6 +106,7 @@ float Rectangle::get_slow_down_speed(float dist_from_dest_cm,float accel_cmss){
           }else{
               return target_speed;
           }
+
 
 }
 

@@ -32,7 +32,7 @@ bool Copter::rectangle_init(bool ignore_checks)
 void Copter::rectangle_run()
 {
 
-    if(!((Ii++)%100)) {
+    if(!((Ii++)%1000)) {
         printf("it's in rectangle_run()\r\n");
         if(Ii>30000)
             Ii=0;
@@ -41,7 +41,6 @@ void Copter::rectangle_run()
     //float target_climb_rate = 0;
     // if not armed or throttle at zero, set throttle to zero and exit immediately
     if(!motors.armed() || ap.throttle_zero) {
-        printf("error  not armed\r\n");
         attitude_control.set_throttle_out_unstabilized(0,true,g.throttle_filt);
         pos_control.set_alt_target_to_current_alt();
         return;
