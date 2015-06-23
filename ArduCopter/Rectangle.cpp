@@ -2,10 +2,8 @@
 // Created by wing on 15/6/10.
 //
 #include <Rectangle.h>
-#include <AP_Math.h>
-#include <Rectangle.h>
-#include "Rectangle.h"
-#include "../libraries/AC_AttitudeControl/AC_PosControl.h"
+#include <AP_HAL.h>
+extern const AP_HAL::HAL& hal;
 
 Rectangle::Rectangle(const AP_InertialNav& inav,const AP_AHRS& ahrs,AC_PosControl& pos_control,const AC_AttitudeControl& attitude_control ) :
        dx(5.0f),
@@ -27,6 +25,7 @@ Rectangle::Rectangle(const AP_InertialNav& inav,const AP_AHRS& ahrs,AC_PosContro
 
 {
     _flags.reached_destination=false;
+    _flags.new_wp_destination=false;
 
 }
 
@@ -50,16 +49,17 @@ void Rectangle::update(){
        }
        _pos_control.freeze_ff_z();
        _pos_control.update_xy_controller(AC_PosControl::XY_MODE_POS_ONLY,1.0f);
+       _wp_last_update = hal.scheduler->millis();
 
     }
 void Rectangle::pos_point() {
      Vector3f curr_pos = _inav.get_position();
 
-             wp_point[0](curr_pos.x+600,curr_pos.y,curr_pos.z);
+             wp_point[0](curr_pos.x+1000,curr_pos.y,curr_pos.z);
              wp_point[1](curr_pos.x+600,curr_pos.y+600,curr_pos.z);
              wp_point[2](curr_pos.x,curr_pos.y+600,curr_pos.z);
 
-             set_wp_origin_and_destination(_pos_control.get_pos_target(),wp_point[No++]);
+             set_wp_origin_and_destination(curr_pos,wp_point[0]);
 
 }
 void Rectangle::set_wp_origin_and_destination(const Vector3f &origin,const Vector3f &destination){
@@ -191,10 +191,13 @@ void Rectangle::cal_target_point(float dt) {
 void Rectangle::rec_nav() {
 
          if(_flags.reached_destination==true){
+             /*
             set_wp_origin_and_destination(_pos_control.get_pos_target(),wp_point[No++]);
             if(No==3){
                 No=0;
             }
+              */
+              printf("reach destination\r\n");
          }
 
 }

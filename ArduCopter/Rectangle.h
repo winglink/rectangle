@@ -10,6 +10,8 @@
 #include <AP_Math.h>
 #include <AP_InertialNav.h>     // Inertial Navigation library
 #include <AC_PosControl.h>
+#include <AC_AttitudeControl.h>
+#include <stdio.h>
 
 #define WPNAV_WP_TRACK_SPEED_MIN         50.0f
 class  Rectangle

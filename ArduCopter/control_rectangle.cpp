@@ -40,7 +40,8 @@ void Copter::rectangle_run()
     float target_yaw_rate = 0;
     //float target_climb_rate = 0;
     // if not armed or throttle at zero, set throttle to zero and exit immediately
-    if(!ap.auto_armed || ap.land_complete || !motors.get_interlock()) {
+    if(!motors.armed() || ap.throttle_zero) {
+        printf("error  not armed\r\n");
         attitude_control.set_throttle_out_unstabilized(0,true,g.throttle_filt);
         pos_control.set_alt_target_to_current_alt();
         return;
