@@ -14,6 +14,7 @@
 #include <stdio.h>
 
 #define WPNAV_WP_TRACK_SPEED_MIN         50.0f
+#define WPNAV_LEASH_LENGTH_MIN          100.0f
 class  Rectangle
 {
 public:
@@ -29,6 +30,9 @@ public:
     float get_pitch() const {return _pos_control.get_pitch();}
     float get_yaw() const {return _yaw;}
     void  rec_nav();
+    void set_wp_destination(const Vector3f& destination);
+    void calculate_leash_length();
+    void calc_slow_down_distance(float speed_cms,float accel_cms);
 
 private:
     const AP_InertialNav&  _inav;
@@ -36,8 +40,6 @@ private:
     AC_PosControl&         _pos_control;
     const AC_AttitudeControl& _attitude_control;
 
-    float tot_x,tot_y,tot_z;
-    float dx,dy,dz;
     int   No;
     Vector3f wp_point[4];
     Vector3f _origin;
@@ -48,17 +50,23 @@ private:
     float    _yaw;
     float    _track_desired;
     float    _limited_speed_xy_cms;
-    const  float  _wp_speed_cms=300;          // maximum horizontal speed in cm/s during missions
-    const  float  _wp_accel_cms=60;
-    const  float  _wp_speed_down_cms=250;
-    const  float  _wp_speed_up_cms=150;
+    const  float  _wp_speed_cms=500;          // maximum horizontal speed in cm/s during missions
+    const  float  _wp_accel_cms=100;
+    const  float  _wp_speed_down_cms=150;
+    const  float  _wp_speed_up_cms=250;
     const  float  _wp_accel_z_cms=100;
-    const  float  _track_accel=10;  //  change ??
-    const  float  _track_leash_length=150;
 
+
+    // point variable
+    float  _track_speed;
+    float  _track_leash_length;
+    float  _track_accel;  //  change ??
+    float  _slow_down_dist;
+    float  _wp_radius_cm=200.0f;
     struct rectangle_flags{
       uint8_t  reached_destination   :1;
       uint8_t  new_wp_destination    :1;
+      uint8_t  recalc_wp_leash       :1;
     }_flags;
 
 
