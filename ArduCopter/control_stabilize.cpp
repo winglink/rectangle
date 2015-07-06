@@ -23,8 +23,8 @@ bool Copter::stabilize_init(bool ignore_checks)
 void Copter::stabilize_run()
 {
 
-    if(!((Ii++)%1000)) {
-        printf("it's in stabilize_runxxxxxwwwwww\r\n");
+    if(!((Ii++)%6000)) {
+        printf("it's in stabilize_runwingggggggggg\r\n");
         if(Ii>30000)
             Ii=0;
     }

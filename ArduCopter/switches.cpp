@@ -21,7 +21,7 @@ static union {
 void Copter::read_control_switch()
 {
     uint32_t tnow_ms = millis();
-   const uint8_t  Rec=18;
+
     // calculate position of flight mode switch
     int8_t switch_position;
     if      (g.rc_5.radio_in < 1231) switch_position = 0;
@@ -43,10 +43,8 @@ void Copter::read_control_switch()
 
     if (control_switch_changed && sufficient_time_elapsed && failsafe_disengaged) {
         // set flight mode and simple mode setting
-        if(switch_position==5){
-            set_mode(Rec);
-        }
-        if ((switch_position!=5)&&set_mode(flight_modes[switch_position])) {
+
+        if (set_mode(flight_modes[switch_position])) {
             // play a tone
             if (control_switch_state.debounced_switch_position != -1) {
                 // alert user to mode change failure (except if autopilot is just starting up)

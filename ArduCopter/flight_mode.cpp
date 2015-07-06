@@ -48,7 +48,7 @@ bool Copter::set_mode(uint8_t mode)
             break;
 
         case CIRCLE:
-            success = circle_init(ignore_checks);
+            success = rectangle_init(ignore_checks);
             break;
 
         case LOITER:
@@ -78,11 +78,8 @@ bool Copter::set_mode(uint8_t mode)
         case FLIP:
             success = flip_init(ignore_checks);
             break;
-        case RECTANGLE:
-            success = rectangle_init(ignore_checks);
-            break;
 
-#if AUTOTUNE_ENABLED == ENABLED
+ #if AUTOTUNE_ENABLED == ENABLED
         case AUTOTUNE:
             success = autotune_init(ignore_checks);
             break;
@@ -164,7 +161,7 @@ void Copter::update_flight_mode()
             break;
 
         case CIRCLE:
-            circle_run();
+            rectangle_run();
             break;
 
         case LOITER:
@@ -182,9 +179,9 @@ void Copter::update_flight_mode()
         case RTL:
             rtl_run();
             break;
-        case RECTANGLE:
-            rectangle_run();
-            break;
+
+
+
 
         case DRIFT:
             drift_run();
@@ -344,9 +341,6 @@ void Copter::print_flight_mode(AP_HAL::BetterStream *port, uint8_t mode)
     case CIRCLE:
         port->print_P(PSTR("CIRCLE"));
         break;
-      case RECTANGLE:
-            port->print_P(PSTR("RECTANGLE"));
-            break;
 
     case LAND:
         port->print_P(PSTR("LAND"));

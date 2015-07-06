@@ -3,7 +3,7 @@
 //
 #include <Rectangle.h>
 #include <AP_HAL.h>
-#include "Rectangle.h"
+
 
 extern const AP_HAL::HAL& hal;
 
@@ -61,12 +61,14 @@ void Rectangle::update(){
     }
 void Rectangle::pos_point() {
      Vector3f curr_pos = _inav.get_position();
+             No=0;
 
              wp_point[0](curr_pos.x+1000,curr_pos.y,curr_pos.z);
              wp_point[1](curr_pos.x+1000,curr_pos.y+1000,curr_pos.z);
-             wp_point[2](curr_pos.x,curr_pos.y+600,curr_pos.z);
+             wp_point[2](curr_pos.x,curr_pos.y+1000,curr_pos.z);
+             wp_point[3](curr_pos.x,curr_pos.y,curr_pos.z);
 
-              set_wp_destination(wp_point[0]);
+              set_wp_destination(wp_point[No++]);
 
 }
 void Rectangle::set_wp_destination(const Vector3f& destination){
@@ -257,9 +259,10 @@ void Rectangle::rec_nav() {
                 No=0;
             }
               */
-              printf("reach destination\r\n");
-              set_wp_destination(wp_point[1]);
-             printf("second destination\r\n");
+              set_wp_destination(wp_point[No++]);
+             if(No==4){
+                 No=0;
+             }
          }
 
 }

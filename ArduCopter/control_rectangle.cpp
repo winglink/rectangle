@@ -31,12 +31,12 @@ bool Copter::rectangle_init(bool ignore_checks)
 // will be called at 100hz or more
 void Copter::rectangle_run()
 {
-
-    if(!((Ii++)%1000)) {
+    /*
+    if(!((Ii++)%)) {
         printf("it's in rectangle_run()\r\n");
         if(Ii>30000)
             Ii=0;
-    }
+    }*/
     float target_yaw_rate = 0;
     //float target_climb_rate = 0;
     // if not armed or throttle at zero, set throttle to zero and exit immediately
@@ -72,7 +72,7 @@ void Copter::rectangle_run()
 
 }
 void Copter::rectangle_nav() {
-     if(control_mode!=RECTANGLE){
+     if(control_mode!=CIRCLE){
          return;
      }
      rectangle.rec_nav();
