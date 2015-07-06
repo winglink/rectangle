@@ -15,6 +15,7 @@
 
 #define WPNAV_WP_TRACK_SPEED_MIN         50.0f
 #define WPNAV_LEASH_LENGTH_MIN          100.0f
+#define COPTER_DIST                     200.0f
 class  Rectangle
 {
 public:
@@ -33,7 +34,7 @@ public:
     void set_wp_destination(const Vector3f& destination);
     void calculate_leash_length();
     void calc_slow_down_distance(float speed_cms,float accel_cms);
-
+    void useful_vector();
 private:
     const AP_InertialNav&  _inav;
     const AP_AHRS&         _ahrs;
@@ -42,6 +43,16 @@ private:
 
     int   No;
     Vector3f wp_point[4];
+
+    Vector3f x_unit;
+    Vector3f y_unit;
+    Vector3f z_unit;
+    int  status;
+    float    x_length;
+    float    y_length;
+    float    z_length;
+
+
     Vector3f _origin;
     Vector3f _destination;
     Vector3f _pos_delta_unit;
@@ -50,6 +61,7 @@ private:
     float    _yaw;
     float    _track_desired;
     float    _limited_speed_xy_cms;
+
     const  float  _wp_speed_cms=500;          // maximum horizontal speed in cm/s during missions
     const  float  _wp_accel_cms=100;
     const  float  _wp_speed_down_cms=150;
@@ -68,6 +80,13 @@ private:
       uint8_t  new_wp_destination    :1;
       uint8_t  recalc_wp_leash       :1;
     }_flags;
+
+    enum flight_status{
+       A_STATUS,
+       B_STATUS,
+       C_STATUS,
+       D_STATUS
+    };
 
 
 

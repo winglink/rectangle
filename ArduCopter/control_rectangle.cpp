@@ -20,6 +20,7 @@ bool Copter::rectangle_init(bool ignore_checks)
     if(position_ok()||ignore_checks) {
         rectangle.init();
         rectangle.pos_point();//计算航迹点
+        rectangle.useful_vector();
         return true;
     }
     else

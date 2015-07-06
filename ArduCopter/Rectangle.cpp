@@ -10,6 +10,10 @@ extern const AP_HAL::HAL& hal;
 Rectangle::Rectangle(const AP_InertialNav& inav,const AP_AHRS& ahrs,AC_PosControl& pos_control,const AC_AttitudeControl& attitude_control ) :
     _yaw(0.0f),
       No(0),
+    x_length(0.0f),
+    y_length(0.0f),
+    z_length(0.0f),
+    status(A_STATUS),
     _wp_last_update(0),
     _slow_down_dist(0.0f),
     _track_length(0.0f),
@@ -39,6 +43,7 @@ void Rectangle::init(){
     _pos_control.set_accel_z(_wp_accel_z_cms);
     _pos_control.calc_leash_length_xy();
     _pos_control.calc_leash_length_z();
+    status=A_STATUS;
 
 }
 
@@ -65,10 +70,10 @@ void Rectangle::pos_point() {
 
              wp_point[0](curr_pos.x+1000,curr_pos.y,curr_pos.z);
              wp_point[1](curr_pos.x+1000,curr_pos.y+1000,curr_pos.z);
-             wp_point[2](curr_pos.x,curr_pos.y+1000,curr_pos.z);
-             wp_point[3](curr_pos.x,curr_pos.y,curr_pos.z);
+             wp_point[2](curr_pos.x-1000,curr_pos.y+1000,curr_pos.z);
+             wp_point[3](curr_pos.x-1000,curr_pos.y,curr_pos.z);
 
-              set_wp_destination(wp_point[No++]);
+              set_wp_destination(wp_point[0]);
 
 }
 void Rectangle::set_wp_destination(const Vector3f& destination){
@@ -259,11 +264,60 @@ void Rectangle::rec_nav() {
                 No=0;
             }
               */
-              set_wp_destination(wp_point[No++]);
-             if(No==4){
-                 No=0;
-             }
+              Vector3f now_tar_pos=_pos_control.get_pos_target();
+              switch (status){
+                  case A_STATUS:
+                      set_wp_destination(now_tar_pos+x_unit*x_length);
+                      status=B_STATUS;
+                      break;
+                  case B_STATUS:
+                      set_wp_destination(now_tar_pos+y_unit*COPTER_DIST);
+                      status=C_STATUS;
+                      break;
+                  case C_STATUS:
+                      set_wp_destination(now_tar_pos+(-x_unit)*x_length);
+                      status=D_STATUS;
+                      break;
+                  case D_STATUS:
+                      set_wp_destination(now_tar_pos+z_unit*COPTER_DIST);
+                      status=A_STATUS;
+                      break;
+
+              }
          }
+
+}
+void Rectangle::useful_vector() {
+       Vector3f pos_delta=wp_point[1]-wp_point[0];
+                x_length=pos_delta.length();
+       if(is_zero(x_length)){
+           x_unit.x=0;
+           x_unit.y=0;
+           x_unit.z=0;
+       }else {
+           x_unit=pos_delta/x_length;  // 1
+       }
+
+       pos_delta=wp_point[2]-wp_point[1];
+       y_length=pos_delta.length();
+       if(is_zero(y_length)){
+           y_unit.x=0;
+           y_unit.y=0;
+           y_unit.z=0;
+       }else {
+           y_unit=pos_delta/y_length;
+       }
+
+       pos_delta=wp_point[3]-wp_point[0];
+       z_length=pos_delta.length();
+       if(is_zero(z_length)){
+           z_unit.x=0;
+           z_unit.y=0;
+           z_unit.z=0;
+       }else {
+           z_unit=pos_delta/z_length;
+       }
+
 
 }
 
