@@ -3,6 +3,7 @@
 //
 #include <Rectangle.h>
 #include <AP_HAL.h>
+#include "Rectangle.h"
 
 
 extern const AP_HAL::HAL& hal;
@@ -13,6 +14,10 @@ Rectangle::Rectangle(const AP_InertialNav& inav,const AP_AHRS& ahrs,AC_PosContro
     x_length(0.0f),
     y_length(0.0f),
     z_length(0.0f),
+    m_length(0.0f),
+    total_length(0.0f),
+    lati_length(0.0f),
+
     status(A_STATUS),
     _wp_last_update(0),
     _slow_down_dist(0.0f),
@@ -44,6 +49,7 @@ void Rectangle::init(){
     _pos_control.calc_leash_length_xy();
     _pos_control.calc_leash_length_z();
     status=A_STATUS;
+    total_length=0.0f;
 
 }
 
@@ -267,23 +273,29 @@ void Rectangle::rec_nav() {
               Vector3f now_tar_pos=_pos_control.get_pos_target();
               switch (status){
                   case A_STATUS:
-                      set_wp_destination(now_tar_pos+x_unit*x_length);
+                      set_wp_destination(now_tar_pos+x_unit*lati_length);
                       status=B_STATUS;
                       break;
                   case B_STATUS:
                       set_wp_destination(now_tar_pos+y_unit*COPTER_DIST);
+                      total_length+=COPTER_DIST;
                       status=C_STATUS;
                       break;
                   case C_STATUS:
-                      set_wp_destination(now_tar_pos+(-x_unit)*x_length);
+                      set_wp_destination(now_tar_pos+(-x_unit)*lati_length);
                       status=D_STATUS;
                       break;
                   case D_STATUS:
                       set_wp_destination(now_tar_pos+z_unit*COPTER_DIST);
+                      total_length+=COPTER_DIST;
                       status=A_STATUS;
                       break;
-
               }
+             if((total_length-min(y_length,z_length))>50){
+                 set_wp_destination(wp_point[0]);
+                 total_length=0.0f;
+                 status=A_STATUS;
+             }
          }
 
 }
@@ -317,6 +329,12 @@ void Rectangle::useful_vector() {
        }else {
            z_unit=pos_delta/z_length;
        }
+       pos_delta=wp_point[3]-wp_point[2];
+       m_length=pos_delta.length();
+
+       lati_length=(x_length+m_length)/2.0f;
+
+
 
 
 }

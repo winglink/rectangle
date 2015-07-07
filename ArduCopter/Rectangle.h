@@ -48,10 +48,12 @@ private:
     Vector3f y_unit;
     Vector3f z_unit;
     int  status;
-    float    x_length;
-    float    y_length;
-    float    z_length;
-
+    float    x_length;   //wp[1]-wp[0]
+    float    y_length;   //wp[2]-wp[1]
+    float    z_length;   //wp[3]-wp[0]
+    float    m_length;   //wp[2]-wp[3]
+    float    total_length;   //横向距离统计
+    float    lati_length;    //纵向距离
 
     Vector3f _origin;
     Vector3f _destination;
