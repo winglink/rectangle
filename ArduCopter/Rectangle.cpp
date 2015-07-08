@@ -71,14 +71,19 @@ void Rectangle::update(){
 
     }
 void Rectangle::pos_point() {
-     Vector3f curr_pos = _inav.get_position();
-             No=0;
+             int i;
+             for(i=0;i!=3;i++){
+                 if(wp_point[i].is_zero()){
+                     printf("reset pos_point\r\n");
+                 }
 
+             }
+             /*
              wp_point[0](curr_pos.x+1000,curr_pos.y,curr_pos.z);
              wp_point[1](curr_pos.x+1000,curr_pos.y+1000,curr_pos.z);
              wp_point[2](curr_pos.x-1000,curr_pos.y+1000,curr_pos.z);
              wp_point[3](curr_pos.x-1000,curr_pos.y,curr_pos.z);
-
+             */
               set_wp_destination(wp_point[0]);
 
 }
@@ -333,12 +338,14 @@ void Rectangle::useful_vector() {
        m_length=pos_delta.length();
 
        lati_length=(x_length+m_length)/2.0f;
-
-
-
+}
+void Rectangle::set_pos_point(const Vector3f& curr,int Nd){
+       wp_point[Nd](curr.x,curr.y,curr.z);
+       printf("wp_point.x=%.4f\r\n",wp_point[Nd].x);
+       printf("wp_point.y=%.4f\r\n",wp_point[Nd].y);
+       printf("wp_point.z=%.4f\r\n",wp_point[Nd].z);
 
 }
-
 
 
 

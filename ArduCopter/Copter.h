@@ -975,6 +975,7 @@ public:
     int8_t reboot_board(uint8_t argc, const Menu::arg *argv);
     //***********************
     int Ii;
+    int Id;   //取点计数
     //************************
 };
 

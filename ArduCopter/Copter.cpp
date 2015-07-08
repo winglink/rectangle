@@ -97,7 +97,6 @@ Copter::Copter(void) :
     circle_nav(inertial_nav, ahrs, pos_control),
 //**********************
    rectangle(inertial_nav, ahrs, pos_control,attitude_control),
-   Ii(0),
 //************************
     pmTest1(0),
     fast_loopTimer(0),
@@ -129,7 +128,9 @@ Copter::Copter(void) :
 #endif
     in_mavlink_delay(false),
     gcs_out_of_time(false),
-    param_loader(var_info)
+    param_loader(var_info),
+    Ii(0),
+    Id(0)
 {
     memset(&current_loc, 0, sizeof(current_loc));
 }

@@ -267,7 +267,14 @@ void Copter::do_aux_switch_function(int8_t ch_function, uint8_t ch_flag)
 
         case AUXSW_SIMPLE_MODE:
             // low = simple mode off, middle or high position turns simple mode on
-            set_simple_mode(ch_flag == AUX_SWITCH_HIGH || ch_flag == AUX_SWITCH_MIDDLE);
+           // set_simple_mode(ch_flag == AUX_SWITCH_HIGH || ch_flag == AUX_SWITCH_MIDDLE);
+            if(ch_flag == AUX_SWITCH_HIGH || ch_flag == AUX_SWITCH_MIDDLE) {
+                Vector3f curr_pos = inertial_nav.get_position();
+                rectangle.set_pos_point(curr_pos, Nd++);
+                if(Nd>=4){
+                    Nd=0;
+                }
+            }
             break;
 
         case AUXSW_SUPERSIMPLE_MODE:

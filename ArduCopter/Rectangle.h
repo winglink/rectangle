@@ -35,6 +35,7 @@ public:
     void calculate_leash_length();
     void calc_slow_down_distance(float speed_cms,float accel_cms);
     void useful_vector();
+    void set_pos_point(const Vector3f& curr,int Nd);
 private:
     const AP_InertialNav&  _inav;
     const AP_AHRS&         _ahrs;
