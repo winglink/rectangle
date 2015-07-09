@@ -11,10 +11,10 @@ extern const AP_HAL::HAL& hal;
 Rectangle::Rectangle(const AP_InertialNav& inav,const AP_AHRS& ahrs,AC_PosControl& pos_control,const AC_AttitudeControl& attitude_control ) :
     _yaw(0.0f),
       No(0),
-    x_length(0.0f),
-    y_length(0.0f),
-    z_length(0.0f),
-    m_length(0.0f),
+    wp01_length(0.0f),
+    wp12_length(0.0f),
+    wp03_length(0.0f),
+    wp23_length(0.0f),
     total_length(0.0f),
     lati_length(0.0f),
 
@@ -72,12 +72,17 @@ void Rectangle::update(){
     }
 void Rectangle::pos_point() {
              int i;
-             for(i=0;i!=3;i++){
+             for(i=0;i!=4;i++){   //检查wp_point的值
                  if(wp_point[i].is_zero()){
                      printf("reset pos_point\r\n");
                  }
 
              }
+             float aver_z=(wp_point[0].z+wp_point[1].z+wp_point[2].z+wp_point[3].z)/4.0f;
+              for(int j=0;j!=4;j++){
+                  wp_point[j].z=aver_z;
+              }
+                printf("aver_z=%.4f\r\n",aver_z);
              /*
              wp_point[0](curr_pos.x+1000,curr_pos.y,curr_pos.z);
              wp_point[1](curr_pos.x+1000,curr_pos.y+1000,curr_pos.z);
@@ -279,24 +284,28 @@ void Rectangle::rec_nav() {
               switch (status){
                   case A_STATUS:
                       set_wp_destination(now_tar_pos+x_unit*lati_length);
+                      printf("A_STATUS\r\n");
                       status=B_STATUS;
                       break;
                   case B_STATUS:
                       set_wp_destination(now_tar_pos+y_unit*COPTER_DIST);
                       total_length+=COPTER_DIST;
+                      printf("B_STATUS\r\n");
                       status=C_STATUS;
                       break;
                   case C_STATUS:
                       set_wp_destination(now_tar_pos+(-x_unit)*lati_length);
                       status=D_STATUS;
+                      printf("C_STATUS\r\n");
                       break;
                   case D_STATUS:
                       set_wp_destination(now_tar_pos+z_unit*COPTER_DIST);
                       total_length+=COPTER_DIST;
+                      printf("D_STATUS\r\n");
                       status=A_STATUS;
                       break;
               }
-             if((total_length-min(y_length,z_length))>50){
+             if((total_length-min(wp12_length, wp03_length))>50){
                  set_wp_destination(wp_point[0]);
                  total_length=0.0f;
                  status=A_STATUS;
@@ -306,38 +315,46 @@ void Rectangle::rec_nav() {
 }
 void Rectangle::useful_vector() {
        Vector3f pos_delta=wp_point[1]-wp_point[0];
-                x_length=pos_delta.length();
-       if(is_zero(x_length)){
+                wp01_length =pos_delta.length();
+       if(is_zero(wp01_length)){
            x_unit.x=0;
            x_unit.y=0;
            x_unit.z=0;
        }else {
-           x_unit=pos_delta/x_length;  // 1
+           x_unit=pos_delta/ wp01_length;  // 1
        }
 
+       printf("wp01_length=%.4f\r\n", wp01_length);
+
        pos_delta=wp_point[2]-wp_point[1];
-       y_length=pos_delta.length();
-       if(is_zero(y_length)){
+       wp12_length=pos_delta.length();
+
+       printf("wp12_length=%.4f\r\n", wp12_length);
+       if(is_zero(wp12_length)){
            y_unit.x=0;
            y_unit.y=0;
            y_unit.z=0;
        }else {
-           y_unit=pos_delta/y_length;
+           y_unit=pos_delta/ wp12_length;
        }
 
        pos_delta=wp_point[3]-wp_point[0];
-       z_length=pos_delta.length();
-       if(is_zero(z_length)){
+       wp03_length=pos_delta.length();
+
+       printf("wp03_length=%.4f\r\n", wp03_length);
+       if(is_zero(wp03_length)){
            z_unit.x=0;
            z_unit.y=0;
            z_unit.z=0;
        }else {
-           z_unit=pos_delta/z_length;
+           z_unit=pos_delta/ wp03_length;
        }
        pos_delta=wp_point[3]-wp_point[2];
-       m_length=pos_delta.length();
+       wp23_length=pos_delta.length();
 
-       lati_length=(x_length+m_length)/2.0f;
+       lati_length=(wp01_length + wp23_length)/2.0f;
+
+       printf("lati_length=%.4f\r\n",lati_length);
 }
 void Rectangle::set_pos_point(const Vector3f& curr,int Nd){
        wp_point[Nd](curr.x,curr.y,curr.z);

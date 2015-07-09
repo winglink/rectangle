@@ -270,9 +270,9 @@ void Copter::do_aux_switch_function(int8_t ch_function, uint8_t ch_flag)
            // set_simple_mode(ch_flag == AUX_SWITCH_HIGH || ch_flag == AUX_SWITCH_MIDDLE);
             if(ch_flag == AUX_SWITCH_HIGH || ch_flag == AUX_SWITCH_MIDDLE) {
                 Vector3f curr_pos = inertial_nav.get_position();
-                rectangle.set_pos_point(curr_pos, Nd++);
-                if(Nd>=4){
-                    Nd=0;
+                rectangle.set_pos_point(curr_pos, Id++);
+                if(Id>=4){
+                    Id=0;
                 }
             }
             break;

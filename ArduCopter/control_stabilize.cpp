@@ -24,7 +24,7 @@ void Copter::stabilize_run()
 {
 
     if(!((Ii++)%6000)) {
-        printf("it's in stabilize_runwingggggggggg\r\n");
+        printf("it's in stabilize_runwin0000000000g\r\n");
         if(Ii>30000)
             Ii=0;
     }
